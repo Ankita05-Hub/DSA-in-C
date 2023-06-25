@@ -1,0 +1,78 @@
+#include <stdio.h>
+#include <conio.h>
+#include <stdlib.h>
+
+#define STACK_SIZE 5
+
+void push(int item, int *top, int s[]) {
+    if (*top != STACK_SIZE - 1) {
+        *top = *top + 1;
+        s[*top] = item;
+    } else {
+        printf("\nOverflow of stack");
+        getch();
+    }
+}
+
+int pop(int *top, int s[]) {
+    int item;
+    if (*top != -1) {
+        item = s[*top];
+        *top = *top - 1;
+        return item;
+    } else {
+        printf("\nStack is empty");
+        return 0;
+    }
+}
+
+void display(int *top, int s[]) {
+    int i;
+    if (*top != -1) {
+        printf("\nContents of the stack: ");
+        for (i = 0; i <= *top; ++i) {
+            printf("%d ", s[i]);
+        }
+    } else {
+        printf("\nStack is empty");
+    }
+}
+
+int main() {
+    int choice, s[STACK_SIZE], item, top = -1;
+    char r;
+    while (1) {
+        system("cls");
+        printf("\nGeneral stack operations");
+        printf("\n1. Push an item");
+        printf("\n2. Pop an item");
+        printf("\n3. Display the contents");
+        printf("\n4. Exit");
+        printf("\nEnter your choice: ");
+        scanf("%d", &choice);
+        switch (choice) {
+            case 1:
+                system("cls");
+                printf("\nEnter the item to be inserted: ");
+                scanf("%d", &item);
+                push(item, &top, s);
+                break;
+            case 2:
+                system("cls");
+                printf("Deleted item is %d", pop(&top, s));
+                getch();
+                break;
+            case 3:
+                system("cls");
+                display(&top, s);
+                getch();
+                break;
+            case 4:
+                exit(0);
+            default:
+                printf("\nInvalid choice");
+                break;
+        }
+    }
+    return 0;
+}
