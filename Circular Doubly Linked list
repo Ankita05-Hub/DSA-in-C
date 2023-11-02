@@ -1,0 +1,113 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node {
+    int info;
+    struct node* link;
+};
+
+typedef struct node* Node;
+
+Node getnode(int item) {
+    Node temp = (Node)malloc(sizeof(struct node));
+    temp->info = item;
+    temp->link = NULL;
+    return temp;
+}
+
+Node insert_front(int item, Node last) {
+    Node temp = getnode(item);
+    if (last == NULL) {
+        temp->link = temp; // Circular reference for the first element
+        last = temp;
+    } else {
+        temp->link = last->link;
+        last->link = temp;
+    }
+    return last;
+}
+
+Node insert_rear(int item, Node last) {
+    Node temp = getnode(item);
+    if (last == NULL) {
+        temp->link = temp;
+        last = temp;
+    } else {
+        temp->link = last->link;
+        last->link = temp;
+        last = temp;
+    }
+    return last;
+}
+
+Node delete_front(Node last) {
+    if (last == NULL) {
+        printf("List is empty\n");
+        return NULL;
+    }
+    
+    Node first = last->link;
+    if (first == last) {
+        printf("The item deleted is %d\n", first->info);
+        free(first);
+        return NULL;
+    }
+    
+    last->link = first->link;
+    printf("The item deleted is %d\n", first->info);
+    free(first);
+    return last;
+}
+
+void display(Node last) {
+    if (last == NULL) {
+        printf("List is empty\n");
+        return;
+    }
+    
+    Node temp = last->link;
+    do {
+        printf("%d ", temp->info);
+        temp = temp->link;
+    } while (temp != last->link);
+    
+    printf("\n");
+}
+
+int main() {
+    int choice, item;
+    Node last = NULL;
+
+    for (;;) {
+        printf("1. Insert Front\n");
+        printf("2. Insert Rear\n");
+        printf("3. Delete Front\n");
+        printf("4. Display\n");
+        printf("5. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter the item to insert: ");
+                scanf("%d", &item);
+                last = insert_front(item, last);
+                break;
+            case 2:
+                printf("Enter the item to insert: ");
+                scanf("%d", &item);
+                last = insert_rear(item, last);
+                break;
+            case 3:
+                last = delete_front(last);
+                break;
+            case 4:
+                display(last);
+                break;
+            case 5:
+                exit(0);
+        }
+    }
+    
+    return 0;
+}
